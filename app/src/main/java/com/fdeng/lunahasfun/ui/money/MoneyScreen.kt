@@ -99,26 +99,37 @@ fun MoneyScreen(
                         textAlign = TextAlign.Center
                     )
 
-                    // Grid of coins
+                    // Grid of larger coins (3 columns, 104.dp size with card background)
                     LazyVerticalGrid(
-                        columns = GridCells.Fixed(4),
+                        columns = GridCells.Fixed(3),
                         modifier = modifier
                             .fillMaxWidth()
                             .weight(1f)
                             .padding(8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        contentPadding = PaddingValues(8.dp)
                     ) {
                         items(uiState.currentProblem.coins) { coin ->
-                            Box(
-                                modifier = modifier.size(72.dp),
-                                contentAlignment = Alignment.Center
+                            Card(
+                                modifier = modifier
+                                    .size(104.dp),
+                                shape = RoundedCornerShape(52.dp), // circular or rounded card
+                                colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)),
+                                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                             ) {
-                                Image(
-                                    painter = painterResource(id = coin.drawableResId),
-                                    contentDescription = coin.displayName,
-                                    modifier = modifier.fillMaxSize()
-                                )
+                                Box(
+                                    modifier = modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Image(
+                                        painter = painterResource(id = coin.drawableResId),
+                                        contentDescription = coin.displayName,
+                                        modifier = modifier
+                                            .fillMaxSize()
+                                            .padding(8.dp)
+                                    )
+                                }
                             }
                         }
                     }

@@ -16,7 +16,7 @@
 *   Stateless utility classes and engines that perform problem generation and calculations.
 *   *Components:*
     *   `MathEngine` (`MathProblem`): Generates 2-digit addition and subtraction pairs (ensuring non-negative results for subtraction).
-    *   `TimeEngine` (planned): Calendar logic and date offsets using `java.time.LocalDate`.
+    *   `TimeEngine` (`DateInfo`): Calendar logic and date offsets using `java.time.LocalDate` (supports current date info and +7 day calculations).
     *   `MoneyEngine` (planned): Coin clustering and cent calculation.
 
 ## Data Flow

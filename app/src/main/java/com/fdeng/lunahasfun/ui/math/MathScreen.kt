@@ -24,6 +24,7 @@ val SoftOrange = Color(0xFFFFB74D)
 @Composable
 fun MathScreen(
     viewModel: MathViewModel,
+    onBackToDashboard: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -41,21 +42,24 @@ fun MathScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // Top Bar: Score
+            // Top Bar: Back Button & Score
             Row(
                 modifier = modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                Button(
+                    onClick = onBackToDashboard,
+                    colors = ButtonDefaults.buttonColors(containerColor = SunflowerYellow),
+                    shape = RoundedCornerShape(12.dp),
+                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                ) {
+                    Text(text = "⬅️ Home", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                }
+
                 Text(
                     text = "⭐ Score: ${uiState.score}",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                )
-                Text(
-                    text = "Math Fun!",
-                    fontSize = 24.sp,
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
@@ -71,7 +75,7 @@ fun MathScreen(
             Card(
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 8.dp),
                 shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(containerColor = cardBg),
                 elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
@@ -85,17 +89,7 @@ fun MathScreen(
                     val operatorSymbol = if (uiState.currentProblem.isAddition) "+" else "-"
                     Text(
                         text = "${uiState.currentProblem.num1}  $operatorSymbol  ${uiState.currentProblem.num2}",
-                        fontSize = 56.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF37474F),
-                        textAlign = TextAlign.Center
-                    )
-
-                    Spacer(modifier = modifier.height(16.dp))
-
-                    Text(
-                        text = "= ${uiState.userInput.ifEmpty { "?" }}",
-                        fontSize = 48.sp,
+                        fontSize = 52.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF37474F),
                         textAlign = TextAlign.Center
@@ -103,27 +97,37 @@ fun MathScreen(
 
                     Spacer(modifier = modifier.height(12.dp))
 
+                    Text(
+                        text = "= ${uiState.userInput.ifEmpty { "?" }}",
+                        fontSize = 44.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF37474F),
+                        textAlign = TextAlign.Center
+                    )
+
+                    Spacer(modifier = modifier.height(10.dp))
+
                     when (uiState.feedbackState) {
                         FeedbackState.CORRECT -> {
                             Text(
                                 text = "🎉 Fantastic Job!",
-                                fontSize = 28.sp,
+                                fontSize = 26.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFF1B5E20)
                             )
-                            Spacer(modifier = modifier.height(8.dp))
+                            Spacer(modifier = modifier.height(6.dp))
                             Button(
                                 onClick = { viewModel.nextProblem() },
                                 colors = ButtonDefaults.buttonColors(containerColor = SunflowerYellow),
                                 shape = RoundedCornerShape(16.dp)
                             ) {
-                                Text(text = "Next Problem ➡️", fontSize = 22.sp, color = Color.Black, fontWeight = FontWeight.Bold)
+                                Text(text = "Next Problem ➡️", fontSize = 20.sp, color = Color.Black, fontWeight = FontWeight.Bold)
                             }
                         }
                         FeedbackState.INCORRECT -> {
                             Text(
                                 text = "💪 Almost! Try Again!",
-                                fontSize = 24.sp,
+                                fontSize = 22.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFFE65100)
                             )
@@ -131,7 +135,7 @@ fun MathScreen(
                         FeedbackState.IDLE -> {
                             Text(
                                 text = "Type your answer below:",
-                                fontSize = 18.sp,
+                                fontSize = 16.sp,
                                 color = Color.Gray
                             )
                         }
@@ -143,8 +147,8 @@ fun MathScreen(
             Column(
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                    .padding(horizontal = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 val buttons = listOf(
                     listOf(1, 2, 3),
@@ -156,13 +160,13 @@ fun MathScreen(
                 for (row in buttons) {
                     Row(
                         modifier = modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         for (btn in row) {
                             KeypadButton(
                                 modifier = modifier
                                     .weight(1f)
-                                    .height(72.dp),
+                                    .height(64.dp),
                                 text = when (btn) {
                                     -1 -> "C"
                                     -2 -> "✔"
@@ -210,7 +214,7 @@ fun KeypadButton(
     ) {
         Text(
             text = text,
-            fontSize = 32.sp,
+            fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF263238)
         )

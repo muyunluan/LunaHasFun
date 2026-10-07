@@ -1,0 +1,15 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="104dp"
+    android:height="104dp"
+    android:viewportWidth="104"
+    android:viewportHeight="104">
+    <!-- Nickel -->
+    <path
+        android:fillColor="#CFD8DC"
+        android:pathData="M52,4 C79.6,4 102,26.4 102,54 C102,81.6 79.6,104 52,104 C24.4,104 2,81.6 2,54 C2,26.4 24.4,4 52,4 Z" />
+    <path
+        android:strokeColor="#90A4AE"
+        android:strokeWidth="2"
+        android:fillColor="#00000000"
+        android:pathData="M52,8 C77.4,8 98,28.6 98,54 C98,79.4 77.4,100 52,100 C26.6,100 6,79.4 6,54 C6,28.6 26.6,8 52,8 Z" />
+</vector>

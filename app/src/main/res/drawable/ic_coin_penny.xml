@@ -1,0 +1,15 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp"
+    android:height="96dp"
+    android:viewportWidth="96"
+    android:viewportHeight="96">
+    <!-- Copper Penny -->
+    <path
+        android:fillColor="#B87333"
+        android:pathData="M48,4 C72.3,4 92,23.7 92,48 C92,72.3 72.3,92 48,92 C23.7,92 4,72.3 4,48 C4,23.7 23.7,4 48,4 Z" />
+    <path
+        android:strokeColor="#8C5825"
+        android:strokeWidth="2"
+        android:fillColor="#00000000"
+        android:pathData="M48,8 C70.1,8 88,25.9 88,48 C88,70.1 70.1,88 48,88 C25.9,88 8,70.1 8,48 C8,25.9 25.9,8 48,8 Z" />
+</vector>

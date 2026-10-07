@@ -1,0 +1,15 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="72dp"
+    android:height="72dp"
+    android:viewportWidth="72"
+    android:viewportHeight="72">
+    <!-- Dime -->
+    <path
+        android:fillColor="#E0E0E0"
+        android:pathData="M36,3 C54.8,3 70,18.2 70,37 C70,55.8 54.8,71 36,71 C17.2,71 2,55.8 2,37 C2,18.2 17.2,3 36,3 Z" />
+    <path
+        android:strokeColor="#9E9E9E"
+        android:strokeWidth="2"
+        android:fillColor="#00000000"
+        android:pathData="M36,6 C53.1,6 67,19.9 67,37 C67,54.1 53.1,68 36,68 C18.9,68 5,54.1 5,37 C5,19.9 18.9,6 36,6 Z" />
+</vector>

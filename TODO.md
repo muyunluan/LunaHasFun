@@ -1,7 +1,7 @@
 # Project Tasks
 
 ## To Do (High Priority)
-- [ ] Gather high-quality assets for US coins (Penny, Nickel, Dime, Quarter).
+*(All high priority tasks completed)*
 
 ## To Do (Medium Priority)
 - [ ] Build the `MoneyScreen` UI that randomly displays a grid of coins and asks for the total.
@@ -17,3 +17,4 @@
 - [x] Build the `MathScreen` UI with large keypad input.
 - [x] Implement `TimeEngine` utility using `java.time.LocalDate` to calculate current dates and +7 day offsets.
 - [x] Create `MainDashboard` composable to let the user select between Math, Money, and Calendar modes.
+- [x] Gather high-quality assets for US coins (Penny, Nickel, Dime, Quarter).

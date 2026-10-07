@@ -1,7 +1,7 @@
 # Project Tasks
 
 ## To Do (High Priority)
-- [ ] Implement `MathEngine` utility to generate random 2-digit addition and subtraction pairs without negative results.
+- [x] Implement `MathEngine` utility to generate random 2-digit addition and subtraction pairs without negative results.
 - [ ] Implement `TimeEngine` utility using `java.time.LocalDate` to calculate current dates and +7 day offsets.
 - [ ] Gather high-quality assets for US coins (Penny, Nickel, Dime, Quarter).
 

@@ -1,7 +1,6 @@
 # Project Tasks
 
 ## To Do (High Priority)
-- [x] Implement `MathEngine` utility to generate random 2-digit addition and subtraction pairs without negative results.
 - [ ] Implement `TimeEngine` utility using `java.time.LocalDate` to calculate current dates and +7 day offsets.
 - [ ] Gather high-quality assets for US coins (Penny, Nickel, Dime, Quarter).
 
@@ -17,3 +16,4 @@
 ## Completed
 - [x] Define project requirements and vibe coding structure.
 - [x] Set up empty Android Studio project with Jetpack Compose.
+- [x] Implement `MathEngine` utility to generate random 2-digit addition and subtraction pairs without negative results.

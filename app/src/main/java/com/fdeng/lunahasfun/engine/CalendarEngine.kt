@@ -19,9 +19,9 @@ object CalendarEngine {
         val futureDate = TimeEngine.getFutureDate(today, daysToAdd)
 
         val question = if (daysToAdd == 7L) {
-            "If today is ${today.dayOfWeek}, what date is it in 7 days?"
+            "What date is it in 7 days?"
         } else {
-            "If today is ${today.dayOfWeek}, what date is it in $daysToAdd day(s)?"
+            "What date is it in $daysToAdd day(s)?"
         }
 
         return CalendarProblem(

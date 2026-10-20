@@ -92,12 +92,9 @@ fun MoneyScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    val isDollar = uiState.currentProblem.problemType == MoneyProblemType.DOLLAR_CONVERSION
-                    val titleText = if (isDollar) "Convert to Dollars & Cents! 💵" else "Count the Coins! 🪙"
-
                     Text(
-                        text = titleText,
-                        fontSize = 22.sp,
+                        text = "Calculate the value of the following coins:",
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF263238),
                         textAlign = TextAlign.Center
@@ -150,19 +147,16 @@ fun MoneyScreen(
                         }
                     }
 
+                    val isDollar = uiState.currentProblem.problemType == MoneyProblemType.DOLLAR_CONVERSION
                     val promptText = if (isDollar) {
-                        val totalCents = uiState.currentProblem.expectedTotalCents
-                        val dol = totalCents / 100
-                        val cnt = totalCents % 100
-                        val formattedDollar = "$$dol.${if(cnt < 10) "0" else ""}$cnt"
-                        "Total Value ($formattedDollar): ${uiState.userInput.ifEmpty { "?" }} ¢"
+                        "Total Value: \$${uiState.userInput.ifEmpty { "?" }}"
                     } else {
-                        "Total Cents: ${uiState.userInput.ifEmpty { "?" }} ¢"
+                        "Total Value: ${uiState.userInput.ifEmpty { "?" }}¢"
                     }
 
                     Text(
                         text = promptText,
-                        fontSize = 22.sp,
+                        fontSize = 28.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF263238),
                         textAlign = TextAlign.Center

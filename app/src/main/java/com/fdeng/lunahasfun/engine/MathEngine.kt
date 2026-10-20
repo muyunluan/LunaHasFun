@@ -11,11 +11,17 @@ data class MathProblem(
 
 object MathEngine {
     /**
-     * Generates a 2-digit addition problem where both numbers are between 10 and 99.
+     * Generates a 2-digit addition problem where both numbers are between 10 and 99
+     * and their total (expectedAnswer) is strictly under 100.
      */
     fun generateAddition(): MathProblem {
-        val num1 = Random.nextInt(10, 100)
-        val num2 = Random.nextInt(10, 100)
+        var num1: Int
+        var num2: Int
+        do {
+            num1 = Random.nextInt(10, 90)
+            num2 = Random.nextInt(10, 100)
+        } while (num1 + num2 >= 100)
+
         return MathProblem(
             num1 = num1,
             num2 = num2,

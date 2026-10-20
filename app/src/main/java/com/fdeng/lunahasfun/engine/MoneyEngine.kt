@@ -22,27 +22,57 @@ data class CoinInstance(
         get() = type.displayName
 }
 
+enum class MoneyProblemType {
+    CENT_COUNTING,
+    DOLLAR_CONVERSION
+}
+
 data class MoneyProblem(
     val coins: List<CoinInstance>,
-    val expectedTotalCents: Int
+    val expectedTotalCents: Int,
+    val problemType: MoneyProblemType
 )
 
 object MoneyEngine {
     /**
-     * Generates a random cluster of 3 to 8 US coins (each randomly heads or tails) and calculates the total cent value.
+     * Generates a random cluster of US coins and dynamically assigns either CENT_COUNTING or DOLLAR_CONVERSION.
      */
     fun generateCoinCluster(): MoneyProblem {
-        val count = Random.nextInt(3, 9)
+        val problemType = if (Random.nextBoolean()) MoneyProblemType.CENT_COUNTING else MoneyProblemType.DOLLAR_CONVERSION
+        
         val availableTypes = listOf(CoinType.PENNY, CoinType.NICKEL, CoinType.DIME, CoinType.QUARTER)
         val coinInstances = mutableListOf<CoinInstance>()
         var total = 0
-        repeat(count) {
-            val randomType = availableTypes.random()
-            val isHeads = Random.nextBoolean()
-            val instance = CoinInstance(randomType, isHeads)
-            coinInstances.add(instance)
-            total += instance.centValue
+
+        if (problemType == MoneyProblemType.DOLLAR_CONVERSION) {
+            // Ensure total is at least 100 cents ($1.00) for dollar conversion
+            while (total < 100) {
+                coinInstances.clear()
+                total = 0
+                val count = Random.nextInt(4, 9)
+                repeat(count) {
+                    val randomType = availableTypes.random()
+                    val isHeads = Random.nextBoolean()
+                    val instance = CoinInstance(randomType, isHeads)
+                    coinInstances.add(instance)
+                    total += instance.centValue
+                }
+            }
+        } else {
+            val count = Random.nextInt(3, 7)
+            repeat(count) {
+                val randomType = availableTypes.random()
+                val isHeads = Random.nextBoolean()
+                val instance = CoinInstance(randomType, isHeads)
+                coinInstances.add(instance)
+                total += instance.centValue
+            }
         }
-        return MoneyProblem(coins = coinInstances, expectedTotalCents = total)
+
+        return MoneyProblem(
+            coins = coinInstances,
+            expectedTotalCents = total,
+            problemType = problemType
+        )
     }
 }

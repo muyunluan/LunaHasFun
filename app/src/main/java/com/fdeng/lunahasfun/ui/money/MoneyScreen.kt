@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.fdeng.lunahasfun.engine.MoneyProblemType
 import com.fdeng.lunahasfun.ui.math.KeypadButton
 import com.fdeng.lunahasfun.ui.math.MintGreen
 import com.fdeng.lunahasfun.ui.math.SkyBlue
@@ -91,9 +92,12 @@ fun MoneyScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
+                    val isDollar = uiState.currentProblem.problemType == MoneyProblemType.DOLLAR_CONVERSION
+                    val titleText = if (isDollar) "Convert to Dollars & Cents! 💵" else "Count the Coins! 🪙"
+
                     Text(
-                        text = "Count the Coins! 🪙",
-                        fontSize = 24.sp,
+                        text = titleText,
+                        fontSize = 22.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF263238),
                         textAlign = TextAlign.Center
@@ -146,9 +150,19 @@ fun MoneyScreen(
                         }
                     }
 
+                    val promptText = if (isDollar) {
+                        val totalCents = uiState.currentProblem.expectedTotalCents
+                        val dol = totalCents / 100
+                        val cnt = totalCents % 100
+                        val formattedDollar = "$$dol.${if(cnt < 10) "0" else ""}$cnt"
+                        "Total Value ($formattedDollar): ${uiState.userInput.ifEmpty { "?" }} ¢"
+                    } else {
+                        "Total Cents: ${uiState.userInput.ifEmpty { "?" }} ¢"
+                    }
+
                     Text(
-                        text = "Total Cents: ${uiState.userInput.ifEmpty { "?" }} ¢",
-                        fontSize = 32.sp,
+                        text = promptText,
+                        fontSize = 22.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF263238),
                         textAlign = TextAlign.Center
@@ -157,7 +171,7 @@ fun MoneyScreen(
                     when (uiState.feedbackState) {
                         MoneyFeedbackState.CORRECT -> {
                             Text(
-                                text = "🎉 Great Counting!",
+                                text = "🎉 Great Job!",
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFF1B5E20)
@@ -167,7 +181,7 @@ fun MoneyScreen(
                                 colors = ButtonDefaults.buttonColors(containerColor = SunflowerYellow),
                                 shape = RoundedCornerShape(16.dp)
                             ) {
-                                Text(text = "Next Coins ➡️", fontSize = 18.sp, color = Color.Black, fontWeight = FontWeight.Bold)
+                                Text(text = "Next Problem ➡️", fontSize = 18.sp, color = Color.Black, fontWeight = FontWeight.Bold)
                             }
                         }
                         MoneyFeedbackState.INCORRECT -> {
@@ -180,7 +194,7 @@ fun MoneyScreen(
                         }
                         MoneyFeedbackState.IDLE -> {
                             Text(
-                                text = "Use keypad to enter total cents",
+                                text = if (isDollar) "Enter total amount in cents" else "Use keypad to enter total cents",
                                 fontSize = 14.sp,
                                 color = Color.Gray
                             )

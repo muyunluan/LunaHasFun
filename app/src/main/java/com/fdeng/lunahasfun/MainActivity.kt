@@ -97,7 +97,7 @@ fun SettingsDialog(
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Text(text = "Select total questions per math round:", color = Color(0xFF37474F))
-                val options = listOf(10, 15, 20, 25, 30)
+                val options = listOf(10, 15, 20, 25)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween

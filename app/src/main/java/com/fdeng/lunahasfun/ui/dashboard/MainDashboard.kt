@@ -22,58 +22,85 @@ fun MainDashboard(
     onNavigateToMath: () -> Unit,
     onNavigateToMoney: () -> Unit,
     onNavigateToCalendar: () -> Unit,
+    onOpenSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(SkyBlue)
-            .padding(24.dp),
-        contentAlignment = Alignment.Center
+            .padding(24.dp)
     ) {
         Column(
-            modifier = modifier.fillMaxWidth(),
+            modifier = modifier
+                .fillMaxSize()
+                .padding(vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = "🌟 Luna Has Fun! 🌟",
-                fontSize = 36.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
+            // Top Bar: Settings button in right above corner
+            Row(
+                modifier = modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Button(
+                    onClick = onOpenSettings,
+                    colors = ButtonDefaults.buttonColors(containerColor = SunflowerYellow),
+                    shape = RoundedCornerShape(12.dp),
+                    contentPadding = PaddingValues(horizontal = 14.dp, vertical = 8.dp)
+                ) {
+                    Text(text = "⚙️ Settings", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                }
+            }
 
-            Text(
-                text = "Choose what you want to play:",
-                fontSize = 20.sp,
-                color = Color.White
-            )
+            // Center Content
+            Column(
+                modifier = modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                Text(
+                    text = "🌟 Luna Has Fun! 🌟",
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
 
-            Spacer(modifier = modifier.height(12.dp))
+                Text(
+                    text = "Choose what you want to play:",
+                    fontSize = 20.sp,
+                    color = Color.White
+                )
 
-            // Math Mode Card
-            DashboardCard(
-                title = "➕ Math Fun",
-                subtitle = "Practice 2-digit addition and subtraction",
-                backgroundColor = SunflowerYellow,
-                onClick = onNavigateToMath
-            )
+                Spacer(modifier = modifier.height(12.dp))
 
-            // Money Mode Card
-            DashboardCard(
-                title = "🪙 Coin Counter",
-                subtitle = "Count pennies, nickels, dimes & quarters",
-                backgroundColor = MintGreen,
-                onClick = onNavigateToMoney
-            )
+                // Math Mode Card
+                DashboardCard(
+                    title = "➕ Math Fun",
+                    subtitle = "Practice 2-digit addition and subtraction",
+                    backgroundColor = SunflowerYellow,
+                    onClick = onNavigateToMath
+                )
 
-            // Calendar Mode Card
-            DashboardCard(
-                title = "📅 Calendar Magic",
-                subtitle = "Learn dates and days of the week",
-                backgroundColor = SoftOrange,
-                onClick = onNavigateToCalendar
-            )
+                // Money Mode Card
+                DashboardCard(
+                    title = "🪙 Coin Counter",
+                    subtitle = "Count pennies, nickels, dimes & quarters",
+                    backgroundColor = MintGreen,
+                    onClick = onNavigateToMoney
+                )
+
+                // Calendar Mode Card
+                DashboardCard(
+                    title = "📅 Calendar Magic",
+                    subtitle = "Learn dates and days of the week",
+                    backgroundColor = SoftOrange,
+                    onClick = onNavigateToCalendar
+                )
+            }
+
+            Spacer(modifier = modifier.height(16.dp))
         }
     }
 }

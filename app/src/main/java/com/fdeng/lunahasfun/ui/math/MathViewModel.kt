@@ -121,15 +121,21 @@ class MathViewModel : ViewModel() {
         } else {
             MathEngine.generateSubtraction()
         }
+        val currentTotal = _uiState.value.totalQuestions
         _uiState.value = MathUiState(
             currentProblem = firstProblem,
             score = 0,
             questionNumber = 1,
-            totalQuestions = 25,
+            totalQuestions = currentTotal,
             mode = MathMode.QUIZ,
             failedProblems = emptyList(),
             replayIndex = 0,
             userInput = ""
         )
+    }
+
+    fun setTotalQuestions(count: Int) {
+        _uiState.update { it.copy(totalQuestions = count) }
+        restartQuiz()
     }
 }

@@ -3,6 +3,7 @@ package com.fdeng.lunahasfun.ui.money
 import androidx.lifecycle.ViewModel
 import com.fdeng.lunahasfun.engine.MoneyEngine
 import com.fdeng.lunahasfun.engine.MoneyProblem
+import com.fdeng.lunahasfun.engine.MoneyProblemType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -63,7 +64,13 @@ class MoneyViewModel : ViewModel() {
             val d = state.userInput.toDoubleOrNull() ?: return
             (d * 100).roundToInt()
         } else {
-            state.userInput.toIntOrNull() ?: return
+            val rawInt = state.userInput.toIntOrNull() ?: return
+            // For dollar conversion problems, if user types single digit representing whole dollars (e.g. "1" for $1.00)
+            if (state.currentProblem.problemType == MoneyProblemType.DOLLAR_CONVERSION && rawInt in 1..9 && state.currentProblem.expectedTotalCents >= 100 && state.currentProblem.expectedTotalCents % 100 == 0) {
+                rawInt * 100
+            } else {
+                rawInt
+            }
         }
 
         val isCorrect = userCents == state.currentProblem.expectedTotalCents

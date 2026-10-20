@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlin.math.roundToInt
 
 data class MoneyUiState(
     val currentProblem: MoneyProblem = MoneyEngine.generateCoinCluster(),
@@ -28,8 +29,20 @@ class MoneyViewModel : ViewModel() {
     fun onDigitPressed(digit: Int) {
         _uiState.update { state ->
             if (state.feedbackState == MoneyFeedbackState.CORRECT) return@update state
-            if (state.userInput.length < 4) {
+            if (state.userInput.length < 6) {
                 state.copy(userInput = state.userInput + digit, feedbackState = MoneyFeedbackState.IDLE)
+            } else {
+                state
+            }
+        }
+    }
+
+    fun onDotPressed() {
+        _uiState.update { state ->
+            if (state.feedbackState == MoneyFeedbackState.CORRECT) return@update state
+            if (!state.userInput.contains(".") && state.userInput.length < 6) {
+                val newInput = if (state.userInput.isEmpty()) "0." else state.userInput + "."
+                state.copy(userInput = newInput, feedbackState = MoneyFeedbackState.IDLE)
             } else {
                 state
             }
@@ -45,7 +58,14 @@ class MoneyViewModel : ViewModel() {
     fun onSubmitAnswer() {
         val state = _uiState.value
         if (state.userInput.isBlank()) return
-        val userCents = state.userInput.toIntOrNull() ?: return
+
+        val userCents = if (state.userInput.contains(".")) {
+            val d = state.userInput.toDoubleOrNull() ?: return
+            (d * 100).roundToInt()
+        } else {
+            state.userInput.toIntOrNull() ?: return
+        }
+
         val isCorrect = userCents == state.currentProblem.expectedTotalCents
 
         if (isCorrect) {

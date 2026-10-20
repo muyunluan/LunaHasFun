@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -80,7 +81,7 @@ fun MoneyScreen(
                 modifier = modifier
                     .fillMaxWidth()
                     .weight(1f)
-                    .padding(vertical = 12.dp),
+                    .padding(vertical = 8.dp),
                 shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(containerColor = cardBg),
                 elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
@@ -94,7 +95,7 @@ fun MoneyScreen(
                 ) {
                     Text(
                         text = "Calculate the value of the following coins:",
-                        fontSize = 20.sp,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF263238),
                         textAlign = TextAlign.Center
@@ -106,19 +107,19 @@ fun MoneyScreen(
                         modifier = modifier
                             .fillMaxWidth()
                             .weight(1f)
-                            .padding(8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
-                        contentPadding = PaddingValues(8.dp)
+                            .padding(4.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        contentPadding = PaddingValues(4.dp)
                     ) {
                         items(uiState.currentProblem.coins) { coin ->
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.spacedBy(4.dp)
+                                verticalArrangement = Arrangement.spacedBy(2.dp)
                             ) {
                                 Card(
-                                    modifier = modifier.size(80.dp),
-                                    shape = RoundedCornerShape(40.dp),
+                                    modifier = modifier.size(72.dp),
+                                    shape = RoundedCornerShape(36.dp),
                                     colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)),
                                     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                                 ) {
@@ -131,17 +132,17 @@ fun MoneyScreen(
                                             contentDescription = coin.displayName,
                                             modifier = modifier
                                                 .fillMaxSize()
-                                                .padding(6.dp)
+                                                .padding(4.dp)
                                         )
                                     }
                                 }
                                 Text(
                                     text = "${coin.displayName}\n(${coin.centValue}¢)",
-                                    fontSize = 12.sp,
+                                    fontSize = 11.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = Color(0xFF263238),
                                     textAlign = TextAlign.Center,
-                                    lineHeight = 14.sp
+                                    lineHeight = 13.sp
                                 )
                             }
                         }
@@ -156,7 +157,7 @@ fun MoneyScreen(
 
                     Text(
                         text = promptText,
-                        fontSize = 28.sp,
+                        fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF263238),
                         textAlign = TextAlign.Center
@@ -166,30 +167,31 @@ fun MoneyScreen(
                         MoneyFeedbackState.CORRECT -> {
                             Text(
                                 text = "🎉 Great Job!",
-                                fontSize = 24.sp,
+                                fontSize = 22.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFF1B5E20)
                             )
                             Button(
                                 onClick = { viewModel.nextProblem() },
                                 colors = ButtonDefaults.buttonColors(containerColor = SunflowerYellow),
-                                shape = RoundedCornerShape(16.dp)
+                                shape = RoundedCornerShape(16.dp),
+                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp)
                             ) {
-                                Text(text = "Next Problem ➡️", fontSize = 18.sp, color = Color.Black, fontWeight = FontWeight.Bold)
+                                Text(text = "Next Problem ➡️", fontSize = 16.sp, color = Color.Black, fontWeight = FontWeight.Bold)
                             }
                         }
                         MoneyFeedbackState.INCORRECT -> {
                             Text(
                                 text = "💪 Try Again!",
-                                fontSize = 20.sp,
+                                fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFFE65100)
                             )
                         }
                         MoneyFeedbackState.IDLE -> {
                             Text(
-                                text = if (isDollar) "Enter total amount in cents" else "Use keypad to enter total cents",
-                                fontSize = 14.sp,
+                                text = if (isDollar) "Type amount in dollars (e.g. 1.25)" else "Use keypad to enter total cents",
+                                fontSize = 12.sp,
                                 color = Color.Gray
                             )
                         }
@@ -197,53 +199,67 @@ fun MoneyScreen(
                 }
             }
 
-            // Keypad
+            // Keypad (1-9, C, 0, ., and Submit ✔)
             Column(
                 modifier = modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                val buttons = listOf(
-                    listOf(1, 2, 3),
-                    listOf(4, 5, 6),
-                    listOf(7, 8, 9),
-                    listOf(-1, 0, -2)
+                val rows = listOf(
+                    listOf("1", "2", "3"),
+                    listOf("4", "5", "6"),
+                    listOf("7", "8", "9"),
+                    listOf("C", "0", ".")
                 )
-                for (row in buttons) {
+                for (row in rows) {
                     Row(
                         modifier = modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
                         for (btn in row) {
                             KeypadButton(
                                 modifier = modifier
                                     .weight(1f)
-                                    .height(56.dp),
-                                text = when (btn) {
-                                    -1 -> "C"
-                                    -2 -> "✔"
-                                    else -> btn.toString()
-                                },
+                                    .height(50.dp),
+                                text = btn,
                                 backgroundColor = when (btn) {
-                                    -1 -> SoftOrange
-                                    -2 -> MintGreen
+                                    "C" -> SoftOrange
+                                    "." -> SunflowerYellow
                                     else -> SunflowerYellow
                                 },
                                 onClick = {
                                     when (btn) {
-                                        -1 -> viewModel.onClearPressed()
-                                        -2 -> {
-                                            if (uiState.feedbackState == MoneyFeedbackState.CORRECT) {
-                                                viewModel.nextProblem()
-                                            } else {
-                                                viewModel.onSubmitAnswer()
-                                            }
-                                        }
-                                        else -> viewModel.onDigitPressed(btn)
+                                        "C" -> viewModel.onClearPressed()
+                                        "." -> viewModel.onDotPressed()
+                                        else -> btn.toIntOrNull()?.let { viewModel.onDigitPressed(it) }
                                     }
                                 }
                             )
                         }
                     }
+                }
+
+                // Submit Button (✔) full width
+                Button(
+                    onClick = {
+                        if (uiState.feedbackState == MoneyFeedbackState.CORRECT) {
+                            viewModel.nextProblem()
+                        } else {
+                            viewModel.onSubmitAnswer()
+                        }
+                    },
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .height(52.dp)
+                        .clip(RoundedCornerShape(16.dp)),
+                    colors = ButtonDefaults.buttonColors(containerColor = MintGreen),
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)
+                ) {
+                    Text(
+                        text = "✔  SUBMIT",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF1B5E20)
+                    )
                 }
             }
         }

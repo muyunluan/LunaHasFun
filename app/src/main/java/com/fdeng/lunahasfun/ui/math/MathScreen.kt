@@ -153,7 +153,7 @@ fun MathScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    // Top Bar: Back Button, Progress/Mode, Score
+                    // Top Bar: Back Button, Progress/Mode
                     Row(
                         modifier = modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -180,16 +180,9 @@ fun MathScreen(
                             fontWeight = FontWeight.Bold,
                             color = Color.White
                         )
-
-                        Text(
-                            text = "⭐ ${uiState.score}",
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
-                        )
                     }
 
-                    // Problem & Input Display Card (Clean, no per-question feedback)
+                    // Problem & Input Display Card
                     Card(
                         modifier = modifier
                             .fillMaxWidth()
@@ -246,7 +239,7 @@ fun MathScreen(
                             listOf("1", "2", "3"),
                             listOf("4", "5", "6"),
                             listOf("7", "8", "9"),
-                            listOf("C", "0", "") // empty spot or blank
+                            listOf("C", "0", "")
                         )
 
                         for (row in buttons) {

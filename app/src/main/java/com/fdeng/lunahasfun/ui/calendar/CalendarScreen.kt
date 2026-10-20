@@ -44,7 +44,7 @@ fun CalendarScreen(
             // Top Bar
             Row(
                 modifier = modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Button(
@@ -55,12 +55,6 @@ fun CalendarScreen(
                 ) {
                     Text(text = "⬅️ Home", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black)
                 }
-                Text(
-                    text = "⭐ Score: ${uiState.score}",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                )
             }
 
             // Calendar Card

@@ -51,7 +51,7 @@ fun MoneyScreen(
             // Top Bar
             Row(
                 modifier = modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Button(
@@ -62,12 +62,6 @@ fun MoneyScreen(
                 ) {
                     Text(text = "⬅️ Home", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black)
                 }
-                Text(
-                    text = "⭐ Score: ${uiState.score}",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                )
             }
 
             // Coin Display & Question Card
@@ -238,7 +232,7 @@ fun MoneyScreen(
                     }
                 }
 
-                // Submit Button (✔) full width
+                // Submit Button (✔ SUBMIT)
                 Button(
                     onClick = {
                         if (uiState.feedbackState == MoneyFeedbackState.CORRECT) {

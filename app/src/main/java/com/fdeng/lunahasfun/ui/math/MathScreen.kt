@@ -35,162 +35,279 @@ fun MathScreen(
             .background(SkyBlue)
             .padding(24.dp)
     ) {
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(vertical = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            // Top Bar: Back Button & Score
-            Row(
-                modifier = modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Button(
-                    onClick = onBackToDashboard,
-                    colors = ButtonDefaults.buttonColors(containerColor = SunflowerYellow),
-                    shape = RoundedCornerShape(12.dp),
-                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
-                ) {
-                    Text(text = "⬅️ Home", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black)
-                }
-
-                Text(
-                    text = "⭐ Score: ${uiState.score}",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                )
-            }
-
-            // Problem & Input Display Card
-            val cardBg = when (uiState.feedbackState) {
-                FeedbackState.CORRECT -> MintGreen
-                FeedbackState.INCORRECT -> SoftOrange
-                FeedbackState.IDLE -> Color.White
-            }
-
-            Card(
+        if (uiState.isCompleted) {
+            // Final Score Screen after 25 questions
+            Column(
                 modifier = modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
-                shape = RoundedCornerShape(24.dp),
-                colors = CardDefaults.cardColors(containerColor = cardBg),
-                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                    .fillMaxSize()
+                    .padding(vertical = 32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                Column(
+                Card(
                     modifier = modifier
                         .fillMaxWidth()
-                        .padding(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .padding(16.dp),
+                    shape = RoundedCornerShape(32.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 12.dp)
                 ) {
-                    val operatorSymbol = if (uiState.currentProblem.isAddition) "+" else "-"
-                    Text(
-                        text = "${uiState.currentProblem.num1}  $operatorSymbol  ${uiState.currentProblem.num2}",
-                        fontSize = 52.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF37474F),
-                        textAlign = TextAlign.Center
-                    )
+                    Column(
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(32.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(20.dp)
+                    ) {
+                        Text(
+                            text = "🏆 Quiz Complete! 🏆",
+                            fontSize = 32.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF263238),
+                            textAlign = TextAlign.Center
+                        )
 
-                    Spacer(modifier = modifier.height(12.dp))
+                        Text(
+                            text = "You finished all 25 questions!",
+                            fontSize = 18.sp,
+                            color = Color.Gray,
+                            textAlign = TextAlign.Center
+                        )
 
-                    Text(
-                        text = "= ${uiState.userInput.ifEmpty { "?" }}",
-                        fontSize = 44.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF37474F),
-                        textAlign = TextAlign.Center
-                    )
-
-                    Spacer(modifier = modifier.height(10.dp))
-
-                    when (uiState.feedbackState) {
-                        FeedbackState.CORRECT -> {
-                            Text(
-                                text = "🎉 Fantastic Job!",
-                                fontSize = 26.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color(0xFF1B5E20)
-                            )
-                            Spacer(modifier = modifier.height(6.dp))
-                            Button(
-                                onClick = { viewModel.nextProblem() },
-                                colors = ButtonDefaults.buttonColors(containerColor = SunflowerYellow),
-                                shape = RoundedCornerShape(16.dp)
+                        // Score display
+                        Card(
+                            modifier = modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(20.dp),
+                            colors = CardDefaults.cardColors(containerColor = SunflowerYellow)
+                        ) {
+                            Column(
+                                modifier = modifier
+                                    .fillMaxWidth()
+                                    .padding(20.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text(text = "Next Problem ➡️", fontSize = 20.sp, color = Color.Black, fontWeight = FontWeight.Bold)
+                                Text(
+                                    text = "Final Score",
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFF263238)
+                                )
+                                Spacer(modifier = modifier.height(8.dp))
+                                Text(
+                                    text = "${uiState.score} / ${uiState.totalQuestions}",
+                                    fontSize = 48.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFF1B5E20)
+                                )
                             }
                         }
-                        FeedbackState.INCORRECT -> {
-                            Text(
-                                text = "💪 Almost! Try Again!",
-                                fontSize = 22.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color(0xFFE65100)
-                            )
+
+                        val praise = when {
+                            uiState.score >= 22 -> "⭐ Amazing Math Superstar! ⭐"
+                            uiState.score >= 18 -> "🎉 Great Job! Keep it up!"
+                            uiState.score >= 12 -> "👍 Good effort! Practice makes perfect!"
+                            else -> "💪 Nice try! Let's play again!"
                         }
-                        FeedbackState.IDLE -> {
-                            Text(
-                                text = "Type your answer below:",
-                                fontSize = 16.sp,
-                                color = Color.Gray
-                            )
+                        Text(
+                            text = praise,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF37474F),
+                            textAlign = TextAlign.Center
+                        )
+
+                        Spacer(modifier = modifier.height(8.dp))
+
+                        Row(
+                            modifier = modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            Button(
+                                onClick = { viewModel.restartQuiz() },
+                                modifier = modifier.weight(1f).height(56.dp),
+                                colors = ButtonDefaults.buttonColors(containerColor = MintGreen),
+                                shape = RoundedCornerShape(16.dp)
+                            ) {
+                                Text(text = "🔄 Play Again", fontSize = 18.sp, color = Color.Black, fontWeight = FontWeight.Bold)
+                            }
+                            Button(
+                                onClick = onBackToDashboard,
+                                modifier = modifier.weight(1f).height(56.dp),
+                                colors = ButtonDefaults.buttonColors(containerColor = SoftOrange),
+                                shape = RoundedCornerShape(16.dp)
+                            ) {
+                                Text(text = "🏠 Home", fontSize = 18.sp, color = Color.Black, fontWeight = FontWeight.Bold)
+                            }
                         }
                     }
                 }
             }
-
-            // Keypad Grid (1-9, C, 0, ✔)
+        } else {
+            // Normal Quiz Question Screen
             Column(
                 modifier = modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                    .fillMaxSize()
+                    .padding(vertical = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
-                val buttons = listOf(
-                    listOf(1, 2, 3),
-                    listOf(4, 5, 6),
-                    listOf(7, 8, 9),
-                    listOf(-1, 0, -2) // -1 for Clear (C), -2 for Submit (✔)
-                )
-
-                for (row in buttons) {
-                    Row(
-                        modifier = modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                // Top Bar: Back Button, Progress, Score
+                Row(
+                    modifier = modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Button(
+                        onClick = onBackToDashboard,
+                        colors = ButtonDefaults.buttonColors(containerColor = SunflowerYellow),
+                        shape = RoundedCornerShape(12.dp),
+                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
                     ) {
-                        for (btn in row) {
-                            KeypadButton(
-                                modifier = modifier
-                                    .weight(1f)
-                                    .height(64.dp),
-                                text = when (btn) {
-                                    -1 -> "C"
-                                    -2 -> "✔"
-                                    else -> btn.toString()
-                                },
-                                backgroundColor = when (btn) {
-                                    -1 -> SoftOrange
-                                    -2 -> MintGreen
-                                    else -> SunflowerYellow
-                                },
-                                onClick = {
-                                    when (btn) {
-                                        -1 -> viewModel.onClearPressed()
-                                        -2 -> {
-                                            if (uiState.feedbackState == FeedbackState.CORRECT) {
-                                                viewModel.nextProblem()
-                                            } else {
-                                                viewModel.onSubmitAnswer()
-                                            }
-                                        }
-                                        else -> viewModel.onDigitPressed(btn)
-                                    }
+                        Text(text = "⬅️ Home", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                    }
+
+                    Text(
+                        text = "Q: ${uiState.questionNumber}/${uiState.totalQuestions}",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+
+                    Text(
+                        text = "⭐ ${uiState.score}",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                }
+
+                // Problem & Input Display Card
+                val cardBg = when (uiState.feedbackState) {
+                    FeedbackState.CORRECT -> MintGreen
+                    FeedbackState.INCORRECT -> SoftOrange
+                    FeedbackState.IDLE -> Color.White
+                }
+
+                Card(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp),
+                    shape = RoundedCornerShape(24.dp),
+                    colors = CardDefaults.cardColors(containerColor = cardBg),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                ) {
+                    Column(
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        val operatorSymbol = if (uiState.currentProblem.isAddition) "+" else "-"
+                        Text(
+                            text = "${uiState.currentProblem.num1}  $operatorSymbol  ${uiState.currentProblem.num2}",
+                            fontSize = 52.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF37474F),
+                            textAlign = TextAlign.Center
+                        )
+
+                        Spacer(modifier = modifier.height(12.dp))
+
+                        Text(
+                            text = "= ${uiState.userInput.ifEmpty { "?" }}",
+                            fontSize = 44.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF37474F),
+                            textAlign = TextAlign.Center
+                        )
+
+                        Spacer(modifier = modifier.height(10.dp))
+
+                        when (uiState.feedbackState) {
+                            FeedbackState.CORRECT -> {
+                                Text(
+                                    text = "🎉 Fantastic Job!",
+                                    fontSize = 26.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFF1B5E20)
+                                )
+                                Spacer(modifier = modifier.height(6.dp))
+                                Button(
+                                    onClick = { viewModel.nextProblem() },
+                                    colors = ButtonDefaults.buttonColors(containerColor = SunflowerYellow),
+                                    shape = RoundedCornerShape(16.dp)
+                                ) {
+                                    Text(text = "Next Problem ➡️", fontSize = 20.sp, color = Color.Black, fontWeight = FontWeight.Bold)
                                 }
-                            )
+                            }
+                            FeedbackState.INCORRECT -> {
+                                Text(
+                                    text = "💪 Almost! Try Again!",
+                                    fontSize = 22.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFFE65100)
+                                )
+                            }
+                            FeedbackState.IDLE -> {
+                                Text(
+                                    text = "Type your answer below:",
+                                    fontSize = 16.sp,
+                                    color = Color.Gray
+                                )
+                            }
+                        }
+                    }
+                }
+
+                // Keypad Grid (1-9, C, 0, ✔)
+                Column(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    val buttons = listOf(
+                        listOf(1, 2, 3),
+                        listOf(4, 5, 6),
+                        listOf(7, 8, 9),
+                        listOf(-1, 0, -2) // -1 for Clear (C), -2 for Submit (✔)
+                    )
+
+                    for (row in buttons) {
+                        Row(
+                            modifier = modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            for (btn in row) {
+                                KeypadButton(
+                                    modifier = modifier
+                                        .weight(1f)
+                                        .height(64.dp),
+                                    text = when (btn) {
+                                        -1 -> "C"
+                                        -2 -> "✔"
+                                        else -> btn.toString()
+                                    },
+                                    backgroundColor = when (btn) {
+                                        -1 -> SoftOrange
+                                        -2 -> MintGreen
+                                        else -> SunflowerYellow
+                                    },
+                                    onClick = {
+                                        when (btn) {
+                                            -1 -> viewModel.onClearPressed()
+                                            -2 -> {
+                                                if (uiState.feedbackState == FeedbackState.CORRECT) {
+                                                    viewModel.nextProblem()
+                                                } else {
+                                                    viewModel.onSubmitAnswer()
+                                                }
+                                            }
+                                            else -> viewModel.onDigitPressed(btn)
+                                        }
+                                    }
+                                )
+                            }
                         }
                     }
                 }

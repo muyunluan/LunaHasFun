@@ -40,6 +40,7 @@ class MainActivity : ComponentActivity() {
             var currentScreen by remember { mutableStateOf<AppScreen>(AppScreen.Dashboard) }
             var showSettingsDialog by remember { mutableStateOf(false) }
             val mathState by mathViewModel.uiState.collectAsState()
+            val moneyState by moneyViewModel.uiState.collectAsState()
 
             Surface(modifier = Modifier.fillMaxSize()) {
                 when (currentScreen) {
@@ -53,10 +54,10 @@ class MainActivity : ComponentActivity() {
 
                         if (showSettingsDialog) {
                             SettingsDialog(
-                                currentTotal = mathState.totalQuestions,
-                                onTotalSelected = { count ->
-                                    mathViewModel.setTotalQuestions(count)
-                                },
+                                mathTotal = mathState.totalQuestions,
+                                moneyTotal = moneyState.totalQuestions,
+                                onMathTotalSelected = { count -> mathViewModel.setTotalQuestions(count) },
+                                onMoneyTotalSelected = { count -> moneyViewModel.setTotalQuestions(count) },
                                 onDismiss = { showSettingsDialog = false }
                             )
                         }
@@ -87,31 +88,59 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun SettingsDialog(
-    currentTotal: Int,
-    onTotalSelected: (Int) -> Unit,
+    mathTotal: Int,
+    moneyTotal: Int,
+    onMathTotalSelected: (Int) -> Unit,
+    onMoneyTotalSelected: (Int) -> Unit,
     onDismiss: () -> Unit
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = "⚙️ Math Quiz Settings", fontWeight = FontWeight.Bold, color = Color(0xFF263238)) },
+        title = { Text(text = "⚙️ App Settings", fontWeight = FontWeight.Bold, color = Color(0xFF263238)) },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                Text(text = "Select total questions per math round:", color = Color(0xFF37474F))
-                val options = listOf(10, 15, 20, 25)
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    for (opt in options) {
-                        Button(
-                            onClick = { onTotalSelected(opt) },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = if (opt == currentTotal) MintGreen else SunflowerYellow
-                            ),
-                            shape = RoundedCornerShape(12.dp),
-                            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
-                        ) {
-                            Text(text = "$opt", fontWeight = FontWeight.Bold, color = Color.Black)
+            Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                // Math settings
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(text = "Math Questions per Round:", fontWeight = FontWeight.SemiBold, color = Color(0xFF37474F))
+                    val options = listOf(10, 15, 20, 25)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        for (opt in options) {
+                            Button(
+                                onClick = { onMathTotalSelected(opt) },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = if (opt == mathTotal) MintGreen else SunflowerYellow
+                                ),
+                                shape = RoundedCornerShape(12.dp),
+                                contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp)
+                            ) {
+                                Text(text = "$opt", fontWeight = FontWeight.Bold, color = Color.Black)
+                            }
+                        }
+                    }
+                }
+
+                // Money settings
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(text = "Coin Counter Questions per Round:", fontWeight = FontWeight.SemiBold, color = Color(0xFF37474F))
+                    val options = listOf(10, 15, 20, 25)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        for (opt in options) {
+                            Button(
+                                onClick = { onMoneyTotalSelected(opt) },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = if (opt == moneyTotal) MintGreen else SunflowerYellow
+                                ),
+                                shape = RoundedCornerShape(12.dp),
+                                contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp)
+                            ) {
+                                Text(text = "$opt", fontWeight = FontWeight.Bold, color = Color.Black)
+                            }
                         }
                     }
                 }

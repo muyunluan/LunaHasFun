@@ -99,7 +99,7 @@ fun MoneyScreen(
                         textAlign = TextAlign.Center
                     )
 
-                    // Grid of larger coins (3 columns, 104.dp size with card background)
+                    // Grid of coins with labels underneath
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(3),
                         modifier = modifier
@@ -111,32 +111,44 @@ fun MoneyScreen(
                         contentPadding = PaddingValues(8.dp)
                     ) {
                         items(uiState.currentProblem.coins) { coin ->
-                            Card(
-                                modifier = modifier
-                                    .size(104.dp),
-                                shape = RoundedCornerShape(52.dp), // circular or rounded card
-                                colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)),
-                                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(4.dp)
                             ) {
-                                Box(
-                                    modifier = modifier.fillMaxSize(),
-                                    contentAlignment = Alignment.Center
+                                Card(
+                                    modifier = modifier.size(80.dp),
+                                    shape = RoundedCornerShape(40.dp),
+                                    colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)),
+                                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                                 ) {
-                                    Image(
-                                        painter = painterResource(id = coin.drawableResId),
-                                        contentDescription = coin.displayName,
-                                        modifier = modifier
-                                            .fillMaxSize()
-                                            .padding(8.dp)
-                                    )
+                                    Box(
+                                        modifier = modifier.fillMaxSize(),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Image(
+                                            painter = painterResource(id = coin.drawableResId),
+                                            contentDescription = coin.displayName,
+                                            modifier = modifier
+                                                .fillMaxSize()
+                                                .padding(6.dp)
+                                        )
+                                    }
                                 }
+                                Text(
+                                    text = "${coin.displayName}\n(${coin.centValue}¢)",
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFF263238),
+                                    textAlign = TextAlign.Center,
+                                    lineHeight = 14.sp
+                                )
                             }
                         }
                     }
 
                     Text(
                         text = "Total Cents: ${uiState.userInput.ifEmpty { "?" }} ¢",
-                        fontSize = 36.sp,
+                        fontSize = 32.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF263238),
                         textAlign = TextAlign.Center

@@ -4,26 +4,34 @@
 
 ### `MathEngine`
 *   `fun generateAddition(): MathProblem`
-    *   *Returns:* Data class containing `val num1: Int`, `val num2: Int`, `val expectedAnswer: Int`. (Both numbers 10-99).
+    *   *Returns:* `MathProblem` containing `val num1: Int`, `val num2: Int`, `val expectedAnswer: Int` (< 100).
 *   `fun generateSubtraction(): MathProblem`
-    *   *Returns:* Ensures `num1 >= num2` to avoid negative answers.
+    *   *Returns:* `MathProblem` ensuring `num1 >= num2` to avoid negative answers.
 
 ### `TimeEngine`
 *   `fun getTodayInfo(): DateInfo`
-    *   *Returns:* Data class with current DayOfWeek and LocalDate.
+    *   *Returns:* `DateInfo` with current `DayOfWeek` and `LocalDate`.
 *   `fun getFutureDate(daysToAdd: Long): LocalDate`
     *   *Input:* Number of days (e.g., 7).
-    *   *Returns:* Exact date string for matching.
+    *   *Returns:* Exact `LocalDate`.
 
 ### `MoneyEngine`
-*   `fun generateCoinCluser(): CoinProblem`
-    *   *Returns:* A list of enums `List<Coin>` (e.g., `[PENNY, DIME, DIME]`) and the `expectedTotalCents: Int`.
+*   `fun generateCoinCluster(): MoneyProblem`
+    *   *Returns:* `MoneyProblem` containing `List<CoinInstance>` (with randomized head/tail PNG assets), `expectedTotalCents: Int`, and `problemType` (`CENT_COUNTING` or `DOLLAR_CONVERSION`).
+
+### `CalendarEngine`
+*   `fun generateQuestion(): CalendarProblem`
+    *   *Returns:* `CalendarProblem` containing question text and target date.
 
 ## ViewModels
 
-### `MathViewModel`
-*   **State:** `uiState: StateFlow<MathUiState>` (contains current problem, user input, and validation state).
+### `MathViewModel` / `MoneyViewModel` / `CalendarViewModel`
+*   **State:** `uiState: StateFlow<UiState>` (contains current problem, user input, score, question number, total questions, mode, and failed problems for review).
 *   **Events:**
     *   `fun onDigitPressed(digit: Int)`
+    *   `fun onDotPressed()`
     *   `fun onClearPressed()`
     *   `fun onSubmitAnswer()`
+    *   `fun nextProblem()`
+    *   `fun restartQuiz()`
+    *   `fun setTotalQuestions(count: Int)`
